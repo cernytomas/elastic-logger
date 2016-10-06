@@ -1,10 +1,10 @@
 {
   "name": "elastic-logger",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Log your app events to ElasticSearch easily",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha --reporter spec test/test.js -S -b -t 10000"
   },
   "repository": {
     "type": "git",
@@ -20,5 +20,11 @@
     "es6-promisify": "^5.0.0",
     "moment": "^2.15.1",
     "nodemailer": "^2.6.4"
+  },
+  "devDependencies": {
+    "co": "^4.6.0",
+    "elasticsearch": "^11.0.1",
+    "mocha": "^2.3.4",
+    "should": "^8.2.0"
   }
 }
