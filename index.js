@@ -38,7 +38,7 @@ class BasicLogging {
           timestamp: new Date(),
           event: event,
           status: 'error',
-          error: {message: err.message || '', stack: err.stack || {}}
+          error: {message: err.message || '', stack: JSON.stringify(err.stack) || ''}
         }
       });
     } catch (e) {
@@ -80,7 +80,7 @@ class EndpointLogging extends BasicLogging {
           endpoint: request.originalUrl,
           status: 'error',
           request: request,
-          error: {message: err.message || '', stack: err.stack || {}}
+          error: {message: err.message || '', stack: JSON.stringify(err.stack) || ''}
         }
       });
     } catch (e) {
