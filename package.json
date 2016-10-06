@@ -1,0 +1,24 @@
+{
+  "name": "elastic-logger",
+  "version": "0.0.1",
+  "description": "Log your app events to ElasticSearch easily",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cernytomas/elastic-logger.git"
+  },
+  "author": "cernytomas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cernytomas/elastic-logger/issues"
+  },
+  "homepage": "https://github.com/cernytomas/elastic-logger#readme",
+  "dependencies": {
+    "es6-promisify": "^5.0.0",
+    "moment": "^2.15.1",
+    "nodemailer": "^2.6.4"
+  }
+}
