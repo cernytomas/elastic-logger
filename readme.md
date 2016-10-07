@@ -1,6 +1,6 @@
 # Simple logger to Elasticsearch 
 ## Features
-positive logging
+success logging
 
 error logging
 
