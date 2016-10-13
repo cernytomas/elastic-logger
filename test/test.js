@@ -6,7 +6,7 @@ var elasticsearch = require('elasticsearch'),
 
 var client = new elasticsearch.Client({
   host: process.env.ELASTIC_DOMAIN,
-  requestTimeout: 100 * 1000
+  requestTimeout: 10 * 1000
 });
 
 describe('0-START', function () {
@@ -41,12 +41,12 @@ describe('0-START', function () {
       })
     })
   });
-
+  let logging = new app.EndpointLogging(client);
   describe('Endpoint logging', function () {
     it('should write an error to console or send email', function (done) {
-      let logging = new app.EndpointLogging(client);
       co(logging.ok({originalUrl: 'passed test', body: {a: 1, c: 2}})).then((res)=> {
         if(res.error) {
+          console.log(res.error)
           done()
         } else {
           done(res);
@@ -59,9 +59,9 @@ describe('0-START', function () {
 
   describe('Endpoint logging', function () {
     it('shouldn\'t send email', function (done) {
-      let logging = new app.EndpointLogging(client);
       co(logging.ok({originalUrl: 'passed test', body: {a: 1, c: 2}})).then((res)=> {
         if(res.error) {
+          console.log(res.error)
           done()
         } else {
           done(res);

@@ -80,7 +80,8 @@ class EndpointLogging extends BasicLogging {
           endpoint: request.originalUrl,
           status: 'error',
           request: request,
-          error: {message: err.message || '', stack: JSON.stringify(err.stack) || ''}
+          error: {message: err.message || '', stack: JSON.stringify(err.stack) || ''},
+          body: JSON.stringify(request.body) || ''
         }
       });
     } catch (e) {
