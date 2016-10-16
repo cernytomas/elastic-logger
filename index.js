@@ -50,17 +50,22 @@ class BasicLogging {
 
 class EndpointLogging extends BasicLogging {
 
-  * ok(type, request) {
+  * ok(type, method, url, headers, responseSize, responseCode, responseTime) {
     try {
       yield this.elastic.create({
         index: 'logs-week-' + moment().isoWeek(),
         type: type,
         body: {
           timestamp: new Date(),
-          method: request.method,
-          endpoint: request.originalUrl,
+          method: method,
+          endpoint: url,
           status: 'ok',
-          body: JSON.stringify(request.body) || ''
+          request: {headers: headers},
+          response: {
+            code: responseCode,
+            size: responseSize,
+            time: responseTime
+          }
         }
       });
     } catch (e) {
@@ -69,7 +74,7 @@ class EndpointLogging extends BasicLogging {
     return {ok: true}
   }
 
-  * error(type, request, err) {
+  * error(type, request, err, responseSize, responseCode, responseTime) {
     try {
       yield this.elastic.create({
         index: 'logs-week-' + moment().isoWeek(),
@@ -81,7 +86,12 @@ class EndpointLogging extends BasicLogging {
           status: 'error',
           request: request,
           error: {message: err.message || '', stack: JSON.stringify(err.stack) || ''},
-          body: JSON.stringify(request.body) || ''
+          body: JSON.stringify(request.body) || '',
+          response: {
+            code: responseCode,
+            size: responseSize,
+            time: responseTime
+          }
         }
       });
     } catch (e) {

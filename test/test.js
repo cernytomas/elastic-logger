@@ -30,7 +30,7 @@ describe('0-START', function () {
   describe('Endpoint logging', function () {
     it('should be fine', function (done) {
       let logging = new app.EndpointLogging(client);
-      co(logging.ok('test', {originalUrl: 'passed test', method: 'GET', body: {a: 1, c: 2}})).then((res)=> {
+      co(logging.ok('test', 'GET', 'passed test', {header1: 1, header2: 2}, 10, 200, 133)).then((res)=> {
         if(res.error) {
           done(res);
         } else {
