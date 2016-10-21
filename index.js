@@ -2,7 +2,7 @@
 let nodemailer = require('nodemailer'),
   promisify = require("es6-promisify"),
   moment = require('moment');
-let lastEmailDate = moment().subtract(7, 'days');
+var lastEmailDate = moment().subtract(7, 'days');
 
 class BasicLogging {
 
@@ -114,10 +114,10 @@ module.exports = {BasicLogging, EndpointLogging};
 
 function * sendErrorEmail(err) {
   try {
-    if(moment().diff(lastEmailDate, 'minutes') > process.env.ERROR_INTERVAL || 5) {
+    if(moment().diff(lastEmailDate, 'minutes') > (process.env.ERROR_INTERVAL || 5)) {
       lastEmailDate = moment();
-      var transporter = nodemailer.createTransport('smtps://' + process.env.MAIL_USER + ':' + process.env.MAIL_PASS + '@' + process.env.MAIL_SMTP_SERVER + '');
-      var sendMail = promisify(transporter.sendMail.bind(transporter));
+      let transporter = nodemailer.createTransport('smtps://' + process.env.MAIL_USER + ':' + process.env.MAIL_PASS + '@' + process.env.MAIL_SMTP_SERVER + '');
+      let sendMail = promisify(transporter.sendMail.bind(transporter));
       yield sendMail({
         to: process.env.ERROR_ADDRESS,
         from: process.env.MAIL_USER,
