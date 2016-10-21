@@ -10,8 +10,19 @@ class BasicLogging {
     this.elastic = elastic;
   }
 
+  /**
+   *
+   * @param type
+   * @param event
+   * @param data object - raw_data: saved as json. Has to have unified structure foreach "type"
+   *                    - stringified_data: saved as string
+   * @returns {*}
+   */
   * ok(type, event, data) {
     try {
+      if(data.stringified_data) {
+        data.stringified_data = JSON.stringify(data.stringified_data);
+      }
       yield this.elastic.create({
         index: 'logs-week-' + moment().isoWeek(),
         type: type,
@@ -19,7 +30,7 @@ class BasicLogging {
           timestamp: new Date(),
           event: event,
           status: 'ok',
-          body: JSON.stringify(data) || ''
+          data: data
         }
       });
     } catch (e) {
@@ -30,7 +41,6 @@ class BasicLogging {
 
   * error(type, event, err) {
     try {
-
       yield this.elastic.create({
         index: 'logs-week-' + moment().isoWeek(),
         type: type,
