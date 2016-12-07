@@ -1,7 +1,8 @@
 'use strict';
-let nodemailer = require('nodemailer'),
+const nodemailer = require('nodemailer'),
   promisify = require("es6-promisify"),
-  moment = require('moment');
+  moment = require('moment'),
+  url = require('url');
 var lastEmailDate = moment().subtract(7, 'days');
 
 class BasicLogging {
@@ -20,7 +21,7 @@ class BasicLogging {
    */
   * ok(type, event, data) {
     try {
-      if(data.stringified_data) {
+      if(data && data.stringified_data) {
         data.stringified_data = JSON.stringify(data.stringified_data);
       }
       yield this.elastic.create({
@@ -60,15 +61,17 @@ class BasicLogging {
 
 class EndpointLogging extends BasicLogging {
 
-  * ok(type, method, url, headers, responseSize, responseCode, responseTime) {
+  * ok(type, method, urlAddress, headers, responseSize, responseCode, responseTime) {
     try {
+      let parsed = url.parse(urlAddress);
       yield this.elastic.create({
         index: 'logs-week-' + moment().isoWeek(),
         type: type,
         body: {
           timestamp: new Date(),
           method: method,
-          endpoint: url,
+          endpoint: parsed.pathname,
+          url: parsed,
           status: 'ok',
           request: {headers: headers},
           response: {
@@ -86,13 +89,15 @@ class EndpointLogging extends BasicLogging {
 
   * error(type, request, err, responseSize, responseCode, responseTime) {
     try {
+      let parsed = url.parse(request.originalUrl);
       yield this.elastic.create({
         index: 'logs-week-' + moment().isoWeek(),
         type: type,
         body: {
           timestamp: new Date(),
           method: request.method,
-          endpoint: request.originalUrl,
+          endpoint: parsed.pathname,
+          url: parsed,
           status: 'error',
           request: request,
           error: {message: err.message || '', stack: JSON.stringify(err.stack) || ''},

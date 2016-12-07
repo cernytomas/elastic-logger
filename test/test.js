@@ -15,7 +15,7 @@ describe('0-START', function () {
   describe('Basic logging', function () {
     it('should return word public', function (done) {
       let logging = new app.BasicLogging(client);
-      co(logging.ok('test', {originalUrl: 'passed test', method: 'GET', body: {a: 1, c: 2}})).then((res)=> {
+      co(logging.ok('test', 'event name', {originalUrl: 'passed test', method: 'GET', body: {a: 1, c: 2}})).then((res)=> {
         if(res.error) {
           done(res);
         } else {
@@ -30,7 +30,7 @@ describe('0-START', function () {
   describe('Endpoint logging', function () {
     it('should be fine', function (done) {
       let logging = new app.EndpointLogging(client);
-      co(logging.ok('test', 'GET', 'passed test', {header1: 1, header2: 2}, 10, 200, 133)).then((res)=> {
+      co(logging.ok('test', 'GET', '/passed-test?query=dd#asdda', {header1: 1, header2: 2}, 10, 200, 133)).then((res)=> {
         if(res.error) {
           done(res);
         } else {
